@@ -258,7 +258,7 @@ def get_outlier_incident(incident_id: str, query_model: OutlierIncidentQuery) ->
     return OutlierIncidentResponse.from_api_response(response)
 
 
-def get_past_incidents(incident_id: str, query_model: PastIncidentsQuery) -> PastIncidentsResponse:
+def get_past_incidents(incident_id: str, query_model: PastIncidentsQuery | None = None) -> PastIncidentsResponse:
     """Get Past Incidents related to a specific incident ID.
 
     Past Incidents returns Incidents within the past 6 months that have similar
@@ -273,6 +273,8 @@ def get_past_incidents(incident_id: str, query_model: PastIncidentsQuery) -> Pas
     Returns:
         List of past incidents with similarity scores
     """
+    if query_model is None:
+        query_model = PastIncidentsQuery()
     params = query_model.to_params()
     response = get_client().rget(f"/incidents/{incident_id}/past_incidents", params=params)
 

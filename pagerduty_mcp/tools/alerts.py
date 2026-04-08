@@ -17,17 +17,19 @@ def get_alert_from_incident(incident_id: str, alert_id: str) -> Alert:
     return Alert.model_validate(response)
 
 
-def list_alerts_from_incident(incident_id: str, query_model: AlertQuery) -> ListResponseModel[Alert]:
+def list_alerts_from_incident(incident_id: str, query_model: AlertQuery | None = None) -> ListResponseModel[Alert]:
     """List alerts for a specific incident.
 
     Args:
         incident_id: The ID of the incident
-        query_model: Query parameters for pagination
+        query_model: Optional query parameters for pagination
 
     Returns:
         List of Alert objects for the incident
 
     """
+    if query_model is None:
+        query_model = AlertQuery()
     params = query_model.to_params()
 
     response = paginate(
